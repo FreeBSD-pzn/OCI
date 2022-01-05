@@ -1,0 +1,50 @@
+#[DEFAULT]
+# user=ocid1.user.oc1
+# fingerprint=
+# tenancy=ocid1.tenancy.oc1
+# compartment=
+# region=eu-frankfurt-1
+# key_file=<path to your private keyfile>
+#
+
+variable "versions" {
+	description = "API version for working with Terraform v 0.12.1"
+	type	    = string
+	default	    = "3.27.0"
+}
+
+variable "tenancy_ocid" {
+	description = "Your Tenancy ID in the Oracle Cloud Infrastructure"
+	type	    = string
+	default	    = "ocid1.tenancy.oc1.."
+}
+
+variable "user_ocid" {
+	description = "User Oracle Cloud ID"
+	type	    = string
+	default	    = "ocid1.user.oc1.."
+}
+
+variable "fingerprint" {
+	description = "Security key"
+	type	    = string
+	default	    = ""
+}
+
+variable "private_key_path" {
+	description = "Path to security key"
+	type	    = string
+	default	    = "~/.oci/"
+}
+
+variable "compartment_ocid" {
+	description = "Compartment Oracle Cloud ID"
+	type	    = string
+	default	    = ""
+}
+
+variable "region" {
+	description = "The name of Region, where to launch services"
+	type	    = string
+	default	    = "eu-frankfurt-1"
+}
