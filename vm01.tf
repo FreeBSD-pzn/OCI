@@ -8,6 +8,7 @@ resource "oci_core_instance" "free_instance01" {
   availability_domain = data.oci_identity_availability_domain.ad.name
   compartment_id      = var.tenancy_ocid
   display_name        = "vm-germany-01"
+  # the next shape will always free
   shape               = "VM.Standard.E2.1.Micro"
 
 
@@ -22,6 +23,9 @@ resource "oci_core_instance" "free_instance01" {
 
   source_details {
     source_type = "image"
+    # list of images in the file images.tf
+    # for example:
+    # source_id = var.images["ubuntu-18-04"]
     source_id   = var.images["cent-os-7x"]
   }
 
