@@ -37,3 +37,11 @@ resource "oci_core_instance" "free_instance01" {
 
 # Needed to output public IP and username
 #
+
+output "public_ip_vm01" {
+     description = "The public IP address of the virtual machine."
+     value = oci_core_instance.free_instance01.public_ip
+}
+
+#
+# End of vm01.tf
