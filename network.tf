@@ -2,6 +2,7 @@
 # Oracle Cloud Infrastructure
 #
 # Describe all network resources in the tenancy
+# to use default resources.
 #
 #-----------------------------------------------
 
@@ -13,26 +14,27 @@ resource "oci_core_virtual_network" "my_own_vcn" {
 }
 
 resource "oci_core_subnet" "my_own_subnet" {
+  # Required
   cidr_block        = "10.1.20.0/28"
-  display_name      = "subnet01"
-  dns_label         = "subnet01"
-  security_list_ids = [oci_core_security_list.my_own_security_list.id]
   compartment_id    = var.tenancy_ocid
   vcn_id            = oci_core_virtual_network.my_own_vcn.id
-  route_table_id    = oci_core_route_table.route_table.id
+
+  # Optional
+  display_name      = "subnet01"
+  dns_label         = "subnet01"
+
+  route_table_id    = oci_core_virtual_network.my_own_vcn.default_route_table_id
   dhcp_options_id   = oci_core_virtual_network.my_own_vcn.default_dhcp_options_id
 }
 
 resource "oci_core_internet_gateway" "my_own_internet_gateway" {
   compartment_id = var.tenancy_ocid
-  display_name   = "myownIG"
+  display_name   = "Internet Gateway IG"
   vcn_id         = oci_core_virtual_network.my_own_vcn.id
 }
 
-resource "oci_core_route_table" "route_table" {
-  compartment_id = var.tenancy_ocid
-  vcn_id         = oci_core_virtual_network.my_own_vcn.id
-  display_name   = "RouteTable"
+resource "oci_core_default_route_table" "route_table" {
+  manage_default_resource_id = oci_core_virtual_network.my_own_vcn.default_route_table_id
 
   route_rules {
     destination       = "0.0.0.0/0"
@@ -41,10 +43,8 @@ resource "oci_core_route_table" "route_table" {
   }
 }
 
-resource "oci_core_security_list" "my_own_security_list" {
-  compartment_id = var.tenancy_ocid
-  vcn_id         = oci_core_virtual_network.my_own_vcn.id
-  display_name   = "SecurityList"
+resource "oci_core_default_security_list" "add_some_rule" {
+   manage_default_resource_id = oci_core_virtual_network.my_own_vcn.default_security_list_id
 
   egress_security_rules {
     protocol    = "all"
@@ -52,7 +52,7 @@ resource "oci_core_security_list" "my_own_security_list" {
   }
 
   ingress_security_rules {
-    protocol = "6"
+    protocol = "all"
     source   = "10.1.20.0/28"
   }
 
@@ -81,7 +81,6 @@ resource "oci_core_security_list" "my_own_security_list" {
     }
   }
 
-
   ingress_security_rules {
     protocol = "6"
     source   = "0.0.0.0/0"
@@ -102,3 +101,5 @@ resource "oci_core_security_list" "my_own_security_list" {
     }
   }
 }
+#
+#
