@@ -43,5 +43,10 @@ output "public_ip_vm02" {
      value = oci_core_instance.free_instance02.public_ip
 }
 
+output "private_ip_vm02" {
+     description = "The private IP address of the virtual machine."
+     value = oci_core_instance.free_instance02.private_ip
+}
+
 #
 # End of vm02.tf
