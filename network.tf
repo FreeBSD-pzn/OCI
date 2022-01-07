@@ -13,8 +13,8 @@ resource "oci_core_virtual_network" "my_own_vcn" {
 }
 
 resource "oci_core_subnet" "my_own_subnet" {
-  cidr_block        = "10.1.20.0/24"
-  display_name      = "Subnet01"
+  cidr_block        = "10.1.20.0/28"
+  display_name      = "subnet01"
   dns_label         = "subnet01"
   security_list_ids = [oci_core_security_list.my_own_security_list.id]
   compartment_id    = var.tenancy_ocid
@@ -47,9 +47,40 @@ resource "oci_core_security_list" "my_own_security_list" {
   display_name   = "SecurityList"
 
   egress_security_rules {
-    protocol    = "6"
+    protocol    = "all"
     destination = "0.0.0.0/0"
   }
+
+  ingress_security_rules {
+    protocol = "6"
+    source   = "10.1.20.0/28"
+  }
+
+  ingress_security_rules {
+    # To get protocol numbers see
+    # https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml
+    # ICMP is 1
+    protocol = "1"
+    source   = "0.0.0.0/0"
+
+    icmp_options {
+      type = 3
+      code = 4
+    }
+  }
+
+  ingress_security_rules {
+    # To get protocol numbers see
+    # https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml
+    # ICMP is 1
+    protocol = "1"
+    source   = "10.1.0.0/16"
+
+    icmp_options {
+      type = 3
+    }
+  }
+
 
   ingress_security_rules {
     protocol = "6"
