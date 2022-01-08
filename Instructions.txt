@@ -70,4 +70,4 @@ ssh -i ~/.ssh/vm-german-02 username@IP-vm-german-02
 Предыдущая версия network.tf была переименована в network.tf.work.
 
 Подробно ознакомиться с создаваемыми OCI ресурсами по умолчанию можно здесь:
-https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformbestpractices_topic-vncdefaults.htm
+https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformbestpractices_topic-vcndefaults.htm
