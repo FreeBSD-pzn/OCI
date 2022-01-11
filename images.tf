@@ -17,5 +17,6 @@ variable "images" {
       ubuntu-16-04           = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaarcgfunltfs5kljdp2tfjula5ac6ulqtxwa525v2nvijch5cigiaa" # End of support
       ubuntu-18-04           = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaauvdz4qrx4v57ekpvh264ayrproytpqkwhdfawy4rbblttigwis3q"
       ubuntu-20-04           = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaaalepl4teucgdomo6jbzgskc4r6fhrz7tp5twfosnqp47lk5v6qoa"
+      ubuntu-20-04-aarch     = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaa6ueulrtedgclrxznl5pkzhzseddl7b6iq6jhdl3vjm62zhddpxta"
   }
 }
