@@ -13,6 +13,10 @@ Terraform v0.12.3
 Для использования данной версии terraform введена проверка версии API OCI
 в файле provider.tf и продублирована переменная в файле variable.tf
 
+* для дополнительной информации:
+* https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformconfigurationupgrades.htm
+*
+
 Перед использованием Вам необходимо зарегистрироваться в OCI и создать
 каталог ~/.oci в своем домашнем каталоге. В этот каталог необходимо
 поместить файл, содержащий PRIVATE KEY, который необходимо сохранить
@@ -71,3 +75,10 @@ ssh -i ~/.ssh/vm-german-02 username@IP-vm-german-02
 
 Подробно ознакомиться с создаваемыми OCI ресурсами по умолчанию можно здесь:
 https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformbestpractices_topic-vcndefaults.htm
+
+10.01.2022
+Для получения информации о характеристиках работающей виртуальной машины введите в консоли:
+curl -H "Authorization: Bearer Oracle" http://169.254.169.254/opc/v2/instance
+curl -H "Authorization: Bearer Oracle" http://169.254.169.254/opc/v2/instance/metadata
+curl -H "Authorization: Bearer Oracle" http://169.254.169.254/opc/v2/instance/shapeConfig
+
