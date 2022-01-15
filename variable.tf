@@ -1,10 +1,15 @@
-#[DEFAULT]
-# user=ocid1.user.oc1
-# fingerprint=
-# tenancy=ocid1.tenancy.oc1
-# compartment=
-# region=eu-frankfurt-1
-# key_file=<path to your private keyfile>
+# The list of variables to use with all files into this directory
+# ---------------------------------------------------------------
+# The next default values of variables
+# has been moved to the terraform.tfvars file:
+#
+# tenancy_ocid
+# user_ocid
+# fingerprint
+# private_key_path
+# compartment_ocid
+#
+# because this variables are PRIVATE
 #
 
 variable "versions" {
@@ -16,31 +21,26 @@ variable "versions" {
 variable "tenancy_ocid" {
 	description = "Your Tenancy ID in the Oracle Cloud Infrastructure"
 	type	    = string
-	default	    = "ocid1.tenancy.oc1.."
 }
 
 variable "user_ocid" {
 	description = "User Oracle Cloud ID"
 	type	    = string
-	default	    = "ocid1.user.oc1.."
 }
 
 variable "fingerprint" {
 	description = "Security key"
 	type	    = string
-	default	    = ""
 }
 
 variable "private_key_path" {
 	description = "Path to security key"
 	type	    = string
-	default	    = "~/.oci/"
 }
 
 variable "compartment_ocid" {
 	description = "Compartment Oracle Cloud ID"
 	type	    = string
-	default	    = ""
 }
 
 variable "region" {
