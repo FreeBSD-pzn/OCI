@@ -13,7 +13,7 @@
 #--------------------------------------------------
 
 resource "oci_core_instance" "free_instance03" {
-  availability_domain = "XCyi:EU-FRANKFURT-1-AD-2"
+  availability_domain = data.oci_identity_availability_domain.adaarch.name
   compartment_id      = var.tenancy_ocid
   display_name        = "vm-germany-03"
   # the next shape will always free

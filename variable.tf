@@ -56,5 +56,11 @@ data "oci_identity_availability_domain" "ad" {
   ad_number      = "3"
 }
 
+data "oci_identity_availability_domain" "adaarch" {
+  compartment_id = var.tenancy_ocid
+  ad_number      = "2"
+}
+
+
 #-----------------------------------------------
 # End of variables and data
