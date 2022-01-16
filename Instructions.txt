@@ -53,7 +53,7 @@ ssh -i ~/.ssh/vm-german-02 username@IP-vm-german-02
 
 имена пользователей:
 для операционной системы Ubuntu - ubuntu
-для операционной системы CenOS  - opc
+для операционной системы CentOS - opc
 
 Пояснения:
 
