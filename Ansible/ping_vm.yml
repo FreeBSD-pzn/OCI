@@ -1,0 +1,9 @@
+# Check that the all virtual machines has been created
+# and configured to connect via SSH.
+- hosts: all
+  become: true
+  tasks:
+    - name: Can we connect
+      ping:
+# ----------------------------------
+# End of playbook ping_vm
