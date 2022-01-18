@@ -5,9 +5,9 @@ variable "images" {
   type = map(string)
 
   default = {
-      cent-os-6x             = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaagoetyy2c5hoyaax5wytihkfavfuv4iexfuco2pe4qf5e5bmpqjjq" # End of support
-      cent-os-7x             = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaawhvrawkfuppm47wqgjf5rrzi4dalnzoqleqwy2ihe7dqycsspm7q"
-      cent-os-8x             = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaah7fv5a2qw7lvux7mspw2yygemniqoe5x5t3hodzmf7uki64dqrtq" # End of support
+      cent-os-6x             = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaagoetyy2c5hoyaax5wytihkfavfuv4iexfuco2pe4qf5e5bmpqjjq" # End of support 11-30-2020
+      cent-os-7x             = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaawhvrawkfuppm47wqgjf5rrzi4dalnzoqleqwy2ihe7dqycsspm7q" # Support till   06-30-2024
+      cent-os-8x             = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaah7fv5a2qw7lvux7mspw2yygemniqoe5x5t3hodzmf7uki64dqrtq" # End of support 21-31-2021
       oracle-auto-linux-7x   = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaahkmjpxpndvvaxigizwpdp4ryjettpkamznshez22jqzii2mm7u6q"
       oracle-linux-6x        = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaa3rjxpkcfs44y5hdf7xmhunx2ipdmbem2bevpayv7gmwuyycbk57a"
       oracle-linux-7x        = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaawq2h5g4nb6odpdt3rwyvp7bx26fv5pyjpbwzlwnybztss34vuz2q"
