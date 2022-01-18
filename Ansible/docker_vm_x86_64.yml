@@ -1,0 +1,21 @@
+# This playbook to install Docker on virtual machines
+# To install Docker will use geerlingguy.docker role
+# to get it ansible-galaxy install geerlingguy.docker
+# ------
+# to configure to use with OCI needed to declare
+# users
+# ------
+# geerlingguy.docker works only for x86-64 architecture VM,
+# so will choiced x86-64 group ( see oci.ini)
+---
+- hosts: x86_64_servers
+  become: true
+
+  vars:
+    docker_users:
+      - "{{ ansible_user }}"
+  roles:
+    - geerlingguy.docker
+
+# ----------------------------------
+# End of playbook docker_vm_x86_64
