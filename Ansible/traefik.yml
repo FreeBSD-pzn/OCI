@@ -1,0 +1,35 @@
+# 1. Install apache2-utils to get htpasswd
+# 2. Generate a password: htpasswd -nb user_name user_password
+# 3. Save password to the file
+# 4. Create, keep and copy config file for the Traefic (traefic.toml)
+#    to support Let's Encrypt
+
+- hosts:  vm-germany-02
+
+  become: true
+
+  tasks:
+    - name: Install htpasswd as part of apache2-utils
+      apt:
+        name:
+           - apache2-utils
+        state: present
+        update_cache: yes
+
+    - name: Check htpasswd
+      command: which htpasswd
+      register: htpasswd_path
+
+    - name: Print PATH of htpasswd
+      debug: 
+         msg: "{{ htpasswd_path.stdout }}"
+
+    - name: Generate password
+      command:  htpasswd -nb admin secure_password
+      register: admin_password
+
+    - name: Print admin password
+      debug:
+         msg: "{{ admin_password.stdout }}"
+# ----------------------------------
+# End of playbook traefik.yml
