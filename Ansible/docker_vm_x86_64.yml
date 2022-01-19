@@ -6,16 +6,16 @@
 # users
 # ------
 # geerlingguy.docker works only for x86-64 architecture VM,
-# so will choiced x86-64 group ( see oci.ini)
+# so will choiced x86-64 group (see oci(OCI).ini)
 ---
 - hosts: x86_64_servers
   become: true
 
-  vars:
-    docker_users:
-      - "{{ ansible_user }}"
   roles:
     - geerlingguy.docker
+  vars:
+     docker_users:
+        - "{{ ansible_user }}"
 
 # ----------------------------------
 # End of playbook docker_vm_x86_64
