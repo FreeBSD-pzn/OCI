@@ -4,7 +4,7 @@ defaultEntryPoints = ["http", "https"]
    [entryPoints.dashboard]
       address = ":8080"
       [entryPoints.dashboard.auth.basic]
-         users = ["{{ admin_password.stdout }}"]
+         users = ["{{ ansible_admin_password.stdout }}"]
    [entryPoints.http]
       address = ":80"
          [entryPoints.http.redirect]
@@ -17,7 +17,7 @@ defaultEntryPoints = ["http", "https"]
 entrypoint = "dashboard"
 
 [acme]
-email = "email"
+email = "{{ ansible_email }}"
 storage = "acme.json"
 entryPoint = "https"
 onHostRule = true
@@ -25,6 +25,6 @@ onHostRule = true
   entryPoint = "http"
 
 [docker]
-domain = "domain"
+domain = "{{ ansible_domain }}"
 watch = true
 network = "www"

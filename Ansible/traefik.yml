@@ -1,10 +1,19 @@
+# What playbook does:
 # 1. Install apache2-utils to get htpasswd
 # 2. Generate a password: htpasswd -nb user_name user_password
-# 3. Save password to the file
-# 4. Create, keep and copy config file for the Traefic (traefic.toml)
-#    to support Let's Encrypt
+# 3. To print admin password use: ansible-playbook -vv
+# 4. Generate, keep and put into it's place config file
+#    for the Traefic (traefic.toml)
+#    Traefik will use with the support Let's Encrypt
+# Descriptions:
+# Before use this playbook need to write your e-mail address
+# and your domain.
+
 
 - hosts:  vm-germany-02
+  vars:
+    ansible_email:           your_email@your_provider.provider_zone
+    ansible_domain:          your_domain.your_zone
 
   become: true
 
@@ -15,21 +24,28 @@
            - apache2-utils
         state: present
         update_cache: yes
-
+#
     - name: Check htpasswd
       command: which htpasswd
-      register: htpasswd_path
+      register: ansible_htpasswd_path
 
     - name: Print PATH of htpasswd
       debug: 
-         msg: "{{ htpasswd_path.stdout }}"
+         msg: "{{ ansible_htpasswd_path.stdout }}"
 
     - name: Generate password
-      command:  htpasswd -nb admin secure_password
-      register: admin_password
+      command:  htpasswd -nb admin test
+      register: ansible_admin_password
 
     - name: Print admin password
       debug:
-         msg: "{{ admin_password.stdout }}"
+         msg: "{{ ansible_admin_password.stdout }}"
+         verbosity: 2
+
+    - name: Generate traefik.toml config file
+      template:
+         src:  traefik.toml
+         dest: traefik.toml
+
 # ----------------------------------
 # End of playbook traefik.yml
