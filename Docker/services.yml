@@ -1,0 +1,62 @@
+# Running SERVICES
+# - traefik for the proxy for the wordpress
+# - database mysql to work with wordpress
+# - wordpress
+#-----------------------------------------------
+# To use this file:
+# $ ln -s services.yml docer-compose.yml
+# $ docker-compose up -d
+#
+
+version: "3"
+
+#===============================================
+networks:
+  www:
+    external: true
+  internal:
+    external: false
+#===============================================
+services:
+  proxy:
+    image: traefik:1.7.2-alpine
+    networks:
+      - www
+    labels:
+      - traefik.frontend.rule=Host:monitor.dlink
+      - traefik.port=8080
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.toml:/traefik.toml
+      - ./acme.json:/acme.json
+
+#-----------------------------------------------
+  dbms:
+    image: mysql:5.7
+    networks:
+      - internal
+    labels:
+      - traefik.enable=false
+    depends_on:
+      - proxy
+
+#-----------------------------------------------
+# ixorg is the name of project
+  ixorg:
+    image: wordpress:4.9.8-apache
+    labels:
+      - traefik.backend=ixorg
+      - traefik.frontend.rule=Host:ixorg.dlink
+      - traefik.docker.network=www
+      - traefik.port=80
+    networks:
+      - internal
+      - www
+    depends_on:
+      - proxy
+      - dbms
+#-----------------------------------------------
+# End of services.yml
