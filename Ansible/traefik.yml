@@ -14,6 +14,13 @@
 # This playbook each times to launch it
 # will generate a new password for the admin user
 # and recreate traefik.toml with the new admin password
+# ----------------
+# Tasks for the future:
+# Сделать так, чтобы если пароль администратора
+# уже был сгенерирован и, соответственно, создан
+# конфигурационный файл для Traefik, то пароль для
+# администратора больше не генерировать и не перезаписывать
+# конфигурационный файл.
 
 
 - hosts:  vm-germany-02
