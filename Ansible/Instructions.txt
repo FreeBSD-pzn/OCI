@@ -1,0 +1,52 @@
+Краткие инструкции.
+
+В данном случае используется операционная система FreeBSD:
+
+$ uname -a <Enter>
+FreeBSD sony 11.3-RELEASE FreeBSD 11.3-RELEASE #0 r349754: Fri Jul  5 04:31:33 UTC 2019
+root@releng2.nyi.freebsd.org:/usr/obj/usr/src/sys/GENERIC  i386
+
+Ansible используется из ports [/usr/ports/sysutils/ansible]
+
+# cd /usr/ports/sysutils/ansible
+# make install
+# make clean
+
+Для установки пакета я всегда использую систему портов в FreeBSD и компилирую
+каждый используемый мной пакет.
+
+$ ansible --version
+ansible 2.8.2
+  config file = None
+  configured module search path = ['/usr/local/share/py36-ansible/plugins/modules']
+  ansible python module location = /usr/local/lib/python3.6/site-packages/ansible
+  executable location = /usr/local/bin/ansible
+  python version = 3.6.9 (default, Jul 17 2019, 14:49:48)
+  [GCC 4.2.1 Compatible FreeBSD Clang 8.0.0 (tags/RELEASE_800/final 356365)]
+
+=====================================================================================
+17.01.2022
+
+В этой папке (директории) выложен файл OCI.ini - это инвентарный файл в нем прописаны
+вымышленные IP адреса виртуальных машин.
+Нужно после завершения работы terraform вставить реальные public IP адреса запущенных
+виртуальных машин в этот файл и сохранить его под именем oci.ini
+
+После этого запустите первый playbook - это ping_vm.yml
+$ ansible-playbook ping_vm.yml
+
+20.01.2022
+
+В соответствии с моим roadmap необходимо запустить сайт для сопровождения проекта.
+Для этой цели планируется использовать Docker и необходимы контейнеры: Traefik,
+MySQL и WordPress.
+В соответствии с этими целями будут готовиться, тестироваться и выкладываться
+необходимые файлы playbook для установки на одну из запущенных в OCI виртуальных
+машин всего необходимого, чтобы выполнить данную задачу.
+
+Мной выбрана виртуальныя машина с Ubuntu 18.
+
+1. Размещен playbook для установки Docker.
+2. Размещен playbook для установки пакета, необходимого
+   для генерации пароля admin в Traefik.
+3. Размещен playbook для создания конфигурации в Traefik

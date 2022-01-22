@@ -1,30 +1,29 @@
 # What playbook does:
-# 1. Install apache2-utils to get htpasswd
+# 1. Check that htpasswd is installed
 # 2. Generate a password: htpasswd -nb user_name user_password
 # 3. To print admin password use: ansible-playbook -vv
 # 4. Generate, keep and put into it's place config file
 #    for the Traefic (traefic.toml)
 #    Traefik will use with the support Let's Encrypt
+# ----------------
 # Descriptions:
 # Before use this playbook need to write your e-mail address
 # and your domain.
+# ----------------
+# Warning:
+# This playbook each times to launch it
+# will generate a new password for the admin user
+# and recreate traefik.toml with the new admin password
 
 
 - hosts:  vm-germany-02
+
   vars:
     ansible_email:           your_email@your_provider.provider_zone
     ansible_domain:          your_domain.your_zone
 
-  become: true
-
   tasks:
-    - name: Install htpasswd as part of apache2-utils
-      apt:
-        name:
-           - apache2-utils
-        state: present
-        update_cache: yes
-#
+
     - name: Check htpasswd
       command: which htpasswd
       register: ansible_htpasswd_path
@@ -37,15 +36,30 @@
       command:  htpasswd -nb admin test
       register: ansible_admin_password
 
-    - name: Print admin password
+    - name: Print admin password. To see it enter option -vv
       debug:
          msg: "{{ ansible_admin_password.stdout }}"
          verbosity: 2
 
+    - name: Get Local PATH 
+      shell:
+            cmd: "pwd"
+      register: ansible_user_home_path
+
+    - name: Create working directory for Docker
+      file:
+         path:   "{{ ansible_user_home_path.stdout_lines[0] }}/Docker"
+         state:  directory
+      register: ansible_working_dir
+
+    - name: Print working directory
+      debug:
+         msg: "{{ ansible_working_dir }}"
+
     - name: Generate traefik.toml config file
       template:
          src:  traefik.toml
-         dest: traefik.toml
+         dest: "{{ansible_working_dir.path }}/traefik.toml"
 
 # ----------------------------------
 # End of playbook traefik.yml
