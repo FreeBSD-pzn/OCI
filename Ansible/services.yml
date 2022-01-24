@@ -26,6 +26,9 @@
 - hosts:  vm-germany-02
 
   vars:
+    ansible_python_interpreter: /usr/bin/python3
+
+    asible_admin_htpasswd:   123qwe
     ansible_email:           your_email@your_provider.provider_zone
     ansible_domain:          your_domain.your_zone
 
@@ -40,13 +43,13 @@
          msg: "{{ ansible_htpasswd_path.stdout }}"
 
     - name: Generate password
-      command:  htpasswd -nb admin test
+      command:  htpasswd -nb admin {{ asible_admin_htpasswd }}
       register: ansible_admin_password
 
     - name: Print admin password. To see it enter option -vv
       debug:
          msg: "{{ ansible_admin_password.stdout }}"
-         verbosity: 2
+#         verbosity: 2
 
     - name: Get Local PATH 
       shell:
@@ -67,6 +70,26 @@
       template:
          src:  traefik.toml
          dest: "{{ansible_working_dir.path }}/traefik.toml"
+
+    - name: Create acme.json file to support Let's Encrypt
+      file:
+         path: "{{ansible_working_dir.path }}/acme.json"
+         state: touch
+         mode:  0600
+
+    - name: Generate docker-compose.yml file
+      template:
+         src:  ../Docker/services.yml
+         dest: "{{ansible_working_dir.path }}/docker-compose.yml"
+
+    - name: Launch services as a Docker
+      docker_compose:
+         project_src: "{{ ansible_working_dir.path }}"
+      register: output
+
+    - name: Print status of running docker
+      debug:
+         msg: "{{ output }}"
 
 # ----------------------------------
 # End of playbook traefik.yml
