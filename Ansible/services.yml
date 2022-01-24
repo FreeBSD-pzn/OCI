@@ -82,6 +82,10 @@
          src:  ../Docker/services.yml
          dest: "{{ansible_working_dir.path }}/docker-compose.yml"
 
+    - name: Create network with the name "www" inside Docker
+      docker_network:
+         name: www
+
     - name: Launch services as a Docker
       docker_compose:
          project_src: "{{ ansible_working_dir.path }}"
