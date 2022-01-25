@@ -99,6 +99,24 @@ resource "oci_core_default_security_list" "add_some_rule" {
       max = "8080"
       min = "8080"
     }
+
+  ingress_security_rules {
+    protocol = "6"
+    source   = "0.0.0.0/0"
+
+    tcp_options {
+      max = "80"
+      min = "80"
+    }
+
+  ingress_security_rules {
+    protocol = "6"
+    source   = "0.0.0.0/0"
+
+    tcp_options {
+      max = "443"
+      min = "443"
+    }
   }
 }
 #
