@@ -8,7 +8,7 @@ defaultEntryPoints = ["http", "https"]
    [entryPoints.http]
       address = ":80"
          [entryPoints.http.redirect]
-         entryPoints = "https"
+         entryPoint = "https"
    [entryPoints.https]
       address = ":443"
          [entryPoints.https.tls]
@@ -17,9 +17,9 @@ defaultEntryPoints = ["http", "https"]
 entrypoint = "dashboard"
 
 [acme]
-email = "{{ ansible_email }}"
-storage = "acme.json"
-entryPoint = "https"
+email = {{ ansible_email }}
+storage = acme.json
+entryPoint = https
 onHostRule = true
   [acme.httpChallenge]
   entryPoint = "http"
