@@ -26,11 +26,15 @@
 - hosts:  vm-germany-02
 
   vars:
+#   ---------------------------------------------
+#   To keep credentials, variables has been moved
+#   into OCI.ini (oci.ini) file.
+#   ---------------------------------------------
     ansible_python_interpreter: /usr/bin/python3
 
-    asible_admin_htpasswd:   123qwe
-    ansible_email:           your_email@your_provider.provider_zone
-    ansible_domain:          your_domain.your_zone
+    asible_admin_htpasswd:   Cfynmzuj
+    ansible_email:           pzn.oleg@yahoo.com
+    ansible_domain:          ixorg.ru
 
   tasks:
 
