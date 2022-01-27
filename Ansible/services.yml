@@ -49,7 +49,7 @@
     - name: Print admin password. To see it enter option -vv
       debug:
          msg: "{{ ansible_admin_password.stdout }}"
-#         verbosity: 2
+         verbosity: 2
 
     - name: Get Local PATH 
       shell:
@@ -96,4 +96,4 @@
          msg: "{{ output }}"
 
 # ----------------------------------
-# End of playbook traefik.yml
+# End of playbook services.yml

@@ -72,7 +72,48 @@ MySQL и WordPress.
 
 Для того чтобы администрировать БД MySQL не входя внутрь запущенного контейнера MySQL
 был добавлен контейнер Adminer.
-Конфигурация Adminer добавлена в файл docker-compose.yml.
+Конфигурация Adminer добавлена в файл ../Docker/services.yml.
 
 В связи с изложенным был переименован
 traefik.yml -> services.yml
+
+27.01.2022
+Промежуточный ПОДИТОГ:
+Все сервисы были протестированы локально с использованием Ubuntu 18 и на
+работающей виртуальной машине OCI с ОС Ubuntu 18.
+
+Некоторые пояснения:
+Файлы playbook Ansible были разделены функционально:
+- docker_vm_x86_64.yml и htpasswd.yml используют SUDO для выполнения заданий
+  <<become: true>>
+- services.yml выполняет задания под полномочиями пользователя, который определен
+  в переменной ansible_user=ubuntu файл OCI.ini (oci.ini)
+
+В файле ../Docker/services.yml используется переменная окружения
+MYSQL_ROOT_PASSWORD
+ее необходимо установить в файле .bashrc работающей виртуальной машины в самом
+начале ниже приведена выдержка из этого файла:
+...
+# If not running interactively, don't do anything
+export MYSQL_ROOT_PASSWORD=123456
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+#
+...
+если не установить данную переменную, то контейнер MySQL не запустится, вернее при
+запуске выйдет с ошибкой, поскольку не будет информации о пароле администратора
+базы данных.
+
+Последовательность запуска playbooks:
+1. ping_vm.yml - тестирование доступности виртуальной машины и проверка SUDO;
+2. docker_vm_x86_64 - установка пакетов Docker и Docker-compose;
+3. htpasswd.yml - установка дополнительных пакетов и библиотек Python;
+4. services.yml - подготовка файлов конфигурации для traefik, docker-compose
+                  и запуск сервисов.
+
+$ ansible-playbook ping_vm.yml
+$ ansible-playbook docker_vm_x86_64
+$ ansible-playbook htpasswd.yml
+$ ansible-playbook services.yml
