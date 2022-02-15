@@ -43,7 +43,7 @@ resource "oci_objectstorage_bucket" "goodbyespy" {                      | resour
 # End of s3.tf                                                          | # End of s3_bucket.tf
 
 Описание как создать bucket в OCI см. оригинал:
-https://registry.terraform.io/provider/hashicorp/oci/latest/docs/resources/objectstorage_bucket
+https://registry.terraform.io/providers/hashicorp/oci/latest/docs/resources/objectstorage_bucket
 
 Дополнительно о шифровании информации в bucket OCI:
 - шифрование включено всегда и его нельзя отключить
