@@ -1,0 +1,60 @@
+23.02.2022
+Из запущенных 3-х виртуальных машин в OCI только пока одна была задействована для
+запуска приложений в контейнерах Docker.
+
+Оставшиеся две виртуальные машины могут быть использованы для запуска элементов
+Kubernetes (k8s).
+
+Первоначальный этап это запуск кластера Kubernetes на локальной базе.
+Для данной цели будет использоваться macmini с установленным Virtualbox и 
+запущенными в VirtualBox виртуальными машинами с ОС Ubuntu:
+1. VM с Ubuntu 21.10 kernel 5.13.0-35-generic ОЗУ 4Мб CPU 2 core для master узла;
+2. VM c Ubuntu 18.04.6 LTS kernel 4.15.0-171-generic ОЗУ 1 Мб CPU 1 core для node;
+3. VM с Ubuntu 20.04.4 LTS kernel 5.4.0-104-generic ОЗУ 1 Мб CPU 1 core для node.
+
+Описаний для установки и конфигурирования кластера Kubernetes в Интернет много,
+вот к примеру https://infoit.com.ua/linux/kak-ustanovit-kubernetes-na-ubuntu-20-04-lts/
+
+Единственное отличие заключается только в том, что мастер узел устанавливался на 
+Ubuntu 21.10, и наименование серверов использовалось свое.
+
+После установки необходимых пакетов на мастер узле и запуска:
+$ sudo kubeadm init
+
+Мастер узел установился и запустился без проблем, что называется "из коробки"
+и по завершении было выведено следующее сообщение:
+------------------------------------------------
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+sudo kubeadm join 192.168.2.90:6443 --token fzs4mj.xxxxxxxxxxxxxxxx (*) --discovery-token-ca-cert-hash
+sha256:c7faaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa (*)
+------------------------------------------------
+* опции --token и sha256: намеренно были изменены
+------------------------------------------------
+
+Попытка запустить рабочие (ведомые) узлы "из коробки" не увенчалась успехом. На рабочих (ведомых) узлах
+целенаправленно были установлены ОС Ubuntu 18.04.6 и 20.04.4 для получения дополнительных навыков установки
+и конфигурирования кластера Kubernetes.
+
+На обоих узлах инициализация завершалась с одной и той же ошибкой. В интернете описано много способов как
+устранить возникающую при инициализации ошибку, например:
+https://www.devopszones.com/2019/03/kubelet-failed-to-run-kubelet-failed-to.html
+
+После исправления docker.service на обоих ведомых узлах оба были инициализированы без ошибок и
+получился кластер kubernetes состоящий из 3-х узлов.
