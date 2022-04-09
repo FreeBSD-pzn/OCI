@@ -58,3 +58,43 @@ https://www.devopszones.com/2019/03/kubelet-failed-to-run-kubelet-failed-to.html
 
 После исправления docker.service на обоих ведомых узлах оба были инициализированы без ошибок и
 получился кластер kubernetes состоящий из 3-х узлов.
+
+===================
+01.03.2022
+
+Для устранения ошибок присоединения ведомых узлов в кластере Kubernetes необходимо внести изменения в
+файлы docker.service в операционных системах Ubuntu 18.04.6 и 20.04.4 эти файлы расположены в разных местах.
+
+для ubuntu 18.04.6 нужно редактировать следующий файл:
+sudo vi /lib/systemd/system/docker.service
+
+после редактирования раздел Service выглядет следующим образом:
+[Service]
+Type=notify
+# the default is not to use systemd for cgroups because the delegate issues still
+# exists and systemd currently does not support the cgroup feature set required
+# for containers run by docker
+ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock --exec-opt native.cgroupdriver=systemd
+ExecReload=/bin/kill -s HUP $MAINPID
+TimeoutSec=0
+RestartSec=2
+Restart=always
+
+для ubuntu 20.04.4 нужно редактировать следующий файл:
+sudo vi /usr/lib/systemd/system/docker.service
+
+после редактирования раздел Service выглядет следующим образом:
+[Service]
+Type=notify
+# the default is not to use systemd for cgroups because the delegate issues still
+# exists and systemd currently does not support the cgroup feature set required
+# for containers run by docker
+ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock --exec-opt native.cgroupdriver=systemd
+ExecReload=/bin/kill -s HUP $MAINPID
+TimeoutSec=0
+RestartSec=2
+Restart=always
+
+Как описано выше после редактирования и перезапуска сервисов ведомые узлы были инициализированы без ошибок и
+получился кластер kubernetes состоящий из 3-х узлов.
+
