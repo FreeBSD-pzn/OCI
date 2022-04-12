@@ -68,7 +68,7 @@ https://www.devopszones.com/2019/03/kubelet-failed-to-run-kubelet-failed-to.html
 для ubuntu 18.04.6 нужно редактировать следующий файл:
 sudo vi /lib/systemd/system/docker.service
 
-после редактирования раздел Service выглядет следующим образом:
+после редактирования раздел Service выглядит следующим образом:
 [Service]
 Type=notify
 # the default is not to use systemd for cgroups because the delegate issues still
@@ -83,7 +83,7 @@ Restart=always
 для ubuntu 20.04.4 нужно редактировать следующий файл:
 sudo vi /usr/lib/systemd/system/docker.service
 
-после редактирования раздел Service выглядет следующим образом:
+после редактирования раздел Service выглядит следующим образом:
 [Service]
 Type=notify
 # the default is not to use systemd for cgroups because the delegate issues still
@@ -97,4 +97,62 @@ Restart=always
 
 Как описано выше после редактирования и перезапуска сервисов ведомые узлы были инициализированы без ошибок и
 получился кластер kubernetes состоящий из 3-х узлов.
+
+===================
+05.03.2022
+
+Кластер Kubernetes запущен, пора утановить kubectl на FreeBSD,
+
+$ uname -a <Enter>
+FreeBSD sony 11.3-RELEASE FreeBSD 11.3-RELEASE #0 r349754: Fri Jul  5 04:31:33 UTC 2019
+root@releng2.nyi.freebsd.org:/usr/obj/usr/src/sys/GENERIC  i386
+
+kubectl используется из ports [/usr/ports/sysutils/kubectl]
+
+# cd /usr/ports/sysutils/kubectl
+# make install
+# make clean
+
+Компиляция и установка прошла без проблем и что называется "из коробки"
+Перед запуском kubectl необходимо скопировать файлы конфигурации в каталог
+по умолчанию пользователя под которым вы планируете работать только копировать
+необходимо с административного узла, скажем используя scp.
+
+$ kubectl version
+Client Version: version.Info{Major:"1", Minor:"15", GitVersion:"v1.15.0", GitCommit:"", GitTreeState:"", BuildDate:"2022-03-08T23:28:04Z", GoVersion:"go1.12.7", Compiler:"gc", Platform:"freebsd/386"}
+Server Version: version.Info{Major:"1", Minor:"23", GitVersion:"v1.23.5", GitCommit:"c285e781331a3785a7f436042c65c5641ce8a9e9", GitTreeState:"clean", BuildDate:"2022-03-16T15:52:18Z", GoVersion:"go1.17.8", Compiler:"gc", Platform:"linux/amd64"}
+
+Теперь вы можете использовать desktop с FreeBSD для управления кластером Kubernetes.
+
+===================
+09.03.2022
+
+pznoleg.sony[~/VM/OCI] <1006-7>$ kubectl get no
+NAME    STATUS   ROLES                  AGE   VERSION
+ubu18   NotReady <none>                 6d    v1.23.4
+ubu20   NotReady <none>                 6d    v1.23.4
+ubunt   Ready    control-plane,master   6d    v1.23.4
+
+Как можно видеть кластер из 3-х узлов запущен, но, можно видеть что ведомые узлы
+"не готовы". Для подготовки кластера Kubernetes в рабочее состояние необходимо
+установить расширения для обеспечения работы "сети кластера Kubernetes".
+
+Например в следующем примере
+https://infoit.com.ua/linux/kak-ustanovit-kubernetes-na-ubuntu-20-04-lts/
+предлагается установить Flannel, но в моем случае установка "из коробки"
+не получилась, так как данное расширение работало со сбоями - на административном
+узле постоянно завершался с ошибкой один из контейнеров и через сутки по команде
+docker ps -a выдавался большой список завершившихся контейнеров, поэтому мне
+пришлось удалить эанный пакет и мной был взят другой пакет: Weave Net.
+Weave Net установился что называется "из коробки".
+
+По следующей ссылке можно посмотреть список пакетов для обеспечения работы сети:
+https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Теперь кластер должен быть готов, проверим:
+pznoleg.sony[~/VM/OCI] <1009-10>$ kubectl get no
+NAME    STATUS   ROLES                  AGE   VERSION
+ubu18   Ready    <none>                 6d    v1.23.4
+ubu20   Ready    <none>                 6d    v1.23.4
+ubunt   Ready    control-plane,master   6d    v1.23.4
 
