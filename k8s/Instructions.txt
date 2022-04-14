@@ -101,7 +101,7 @@ Restart=always
 ===================
 05.03.2022
 
-Кластер Kubernetes запущен, пора утановить kubectl на FreeBSD,
+Кластер Kubernetes запущен, пора установить kubectl на FreeBSD,
 
 $ uname -a <Enter>
 FreeBSD sony 11.3-RELEASE FreeBSD 11.3-RELEASE #0 r349754: Fri Jul  5 04:31:33 UTC 2019
@@ -115,7 +115,7 @@ kubectl используется из ports [/usr/ports/sysutils/kubectl]
 
 Компиляция и установка прошла без проблем и что называется "из коробки"
 Перед запуском kubectl необходимо скопировать файлы конфигурации в каталог
-по умолчанию пользователя под которым вы планируете работать только копировать
+по умолчанию пользователя, под которым вы планируете работать, только копировать
 необходимо с административного узла, скажем используя scp.
 
 $ kubectl version
@@ -133,7 +133,7 @@ ubu18   NotReady <none>                 6d    v1.23.4
 ubu20   NotReady <none>                 6d    v1.23.4
 ubunt   Ready    control-plane,master   6d    v1.23.4
 
-Как можно видеть кластер из 3-х узлов запущен, но, можно видеть что ведомые узлы
+Как можно видеть кластер из 3-х узлов запущен, но, видно что ведомые узлы
 "не готовы". Для подготовки кластера Kubernetes в рабочее состояние необходимо
 установить расширения для обеспечения работы "сети кластера Kubernetes".
 
@@ -143,7 +143,7 @@ https://infoit.com.ua/linux/kak-ustanovit-kubernetes-na-ubuntu-20-04-lts/
 не получилась, так как данное расширение работало со сбоями - на административном
 узле постоянно завершался с ошибкой один из контейнеров и через сутки по команде
 docker ps -a выдавался большой список завершившихся контейнеров, поэтому мне
-пришлось удалить эанный пакет и мной был взят другой пакет: Weave Net.
+пришлось удалить данный пакет и мной был взят другой пакет: Weave Net.
 Weave Net установился что называется "из коробки".
 
 По следующей ссылке можно посмотреть список пакетов для обеспечения работы сети:
@@ -156,3 +156,28 @@ ubu18   Ready    <none>                 6d    v1.23.4
 ubu20   Ready    <none>                 6d    v1.23.4
 ubunt   Ready    control-plane,master   6d    v1.23.4
 
+===================
+16.03.2022
+Небольшое замечание:
+Расширение Flannel удалить "чисто" не получилось и кластер Kubernetes пришлось
+инициализировать с нуля с последующей установкой Weave Net.
+
+Как можно видеть установленный kubectl на FreeBSD следующей версии:
+version.Info {Major:"1", Minor:"15", GitVersion:"v1.15.0"}
+
+На Ubuntu была установлена следующая версия kubectl:
+oleg.Ubunt[~] <998-1>$ kubectl version
+Client Version: version.Info{Major:"1", Minor:"23", GitVersion:"v1.23.4", GitCommit:"e6c093d87ea4cbb530a7b2ae91e54c0842d8308a", GitTreeState:"clean", BuildDate:"2022-02-16T12:38:05Z", GoVersion:"go1.17.7", Compiler:"gc", Platform:"linux/amd64"}
+Server Version: version.Info{Major:"1", Minor:"23", GitVersion:"v1.23.5", GitCommit:"c285e781331a3785a7f436042c65c5641ce8a9e9", GitTreeState:"clean", BuildDate:"2022-03-16T15:52:18Z", GoVersion:"go1.17.8", Compiler:"gc", Platform:"linux/amd64"}
+
+Разные версии kubectl поддерживают разные опции командной строки.
+
+!!! Так, к примеру, в kubectl run в Ubuntu отсутствует опция --generator,
+в то время как в FreeBSD эта опция присутствует и можно ввести следующую команду:
+kubectl run lesson02 --image=goodbyespy/lesson02 --port=8080 --generator=run-pod/v1
+
+Для экспериментов можно использовать данные в каталоге k8s/Lesson02.
+Образ Docker можно найти в hub.docker.com под именем goodbyespy/lesson02.
+
+Можете поэксперементировать, к примеру попробуйте следующую команду:
+kubectl api-resources | awk '{ print $1}' | sort | xargs -L 1 kubectl get
