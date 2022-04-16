@@ -181,3 +181,55 @@ kubectl run lesson02 --image=goodbyespy/lesson02 --port=8080 --generator=run-pod
 
 Можете поэксперементировать, к примеру попробуйте следующую команду:
 kubectl api-resources | awk '{ print $1}' | sort | xargs -L 1 kubectl get
+
+===================
+23.03.2022
+Командой
+kubectl run lesson02 --image=goodbyespy/lesson02 --port=8080 --generator=run-pod/v1
+были созданы и запущены следующие ресурсы:
+
+pod сокращенно po и
+replicationcontrollers сокращенно rc
+
+pznoleg.sony[~] <1001-2>$ kubectl get po
+NAME             READY   STATUS    RESTARTS   AGE
+lesson02-2jpj7   1/1     Running   0          40h
+
+pznoleg.sony[~] <1002-3>$ kubectl get rc
+NAME       DESIRED   CURRENT   READY   AGE
+lesson02   1         1         1       20d
+
+для интереса можно использовать опцию -o wide:
+
+pznoleg.sony[~] <1006-7>$ kubectl get rc -o wide
+NAME       DESIRED   CURRENT   READY   AGE   CONTAINERS   IMAGES                SELECTOR
+lesson02   1         1         1       20d   lesson02     goodbyespy/lesson02   run=lesson02
+
+pznoleg.sony[~] <1007-8>$ kubectl get po -o wide
+NAME             READY   STATUS    RESTARTS   AGE   IP          NODE    NOMINATED NODE   READINESS GATES
+lesson02-2jpj7   1/1     Running   0          40h   10.40.0.1   ubu20   <none>           <none>
+
+Ну что ж, отлично, кластер работает, сервисы запускаются и функционируют.
+Следующий этап получить доступ к запущенным в кластере Kubernetes сервисам.
+По умолчанию доступа извне к запущенным сервисам в кластере доступа нет, для
+обеспечения доступа используется служба services сокращенно svc.
+
+Для создания службы используем команду:
+kubectl expose rc lesson02 --type=LoadBalancer --name lesson02
+
+Введя сразу ввода предыдущей команды, следующую команду
+kubectl get svc
+получим:
+pznoleg.sony[~] <1017-18>$ kubectl get svc
+NAME         TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)          AGE
+kubernetes   ClusterIP      10.96.0.1       <none>          443/TCP          28d
+lesson02     LoadBalancer   10.97.132.218   <pending>       8080:31621/TCP   2s
+
+Видно что создана служба lesson02 с типом LoadBalancer и в настоящий момент происходит назначение
+внешнего IP адреса для этой службы, что бы после назначения внешнего IP можно было получать информацию
+от этой службы.
+
+Но даже если посмотрите на поле EXTERNAL-IP спустя сутки вы не увидите назначенный внешний IP,
+в этом поле все еще будет присутствовать <pending>.
+
+Как эту ситуацию исправить будет описано в ближайшее время.
